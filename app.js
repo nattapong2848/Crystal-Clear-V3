@@ -62,11 +62,29 @@
     const logo=$('brandLogo');
     if(logo){ let clicks=0; logo.addEventListener('click',()=>{ clicks++; setTimeout(()=>clicks=0,900); if(clicks>=5) location.href='login.html'; }); logo.addEventListener('dblclick',()=>location.href='login.html'); }
     const statusSection=document.querySelector('#status');
+    const backdrop=$('statusBackdrop');
     const revealStatus=()=>{
-      if(statusSection){ statusSection.classList.remove('status-hidden'); statusSection.classList.add('status-visible'); statusSection.scrollIntoView({behavior:'smooth',block:'start'}); }
-      setTimeout(()=>$('searchInput')?.focus(),450);
+      if(statusSection){
+        statusSection.classList.remove('status-hidden');
+        statusSection.classList.add('status-visible');
+        document.body.classList.add('drawer-open');
+      }
+      if(backdrop) backdrop.classList.add('show');
+      setTimeout(()=>$('searchInput')?.focus(),260);
+    };
+    const hideStatus=()=>{
+      if(statusSection){
+        statusSection.classList.remove('status-visible');
+        statusSection.classList.add('status-hidden');
+        document.body.classList.remove('drawer-open');
+      }
+      if(backdrop) backdrop.classList.remove('show');
+      if(location.hash==='#status') history.replaceState(null,'',location.pathname + location.search);
     };
     const toStatus=$('toStatus'); if(toStatus) toStatus.onclick=e=>{ e.preventDefault(); revealStatus(); };
+    const closeStatus=$('closeStatus'); if(closeStatus) closeStatus.onclick=hideStatus;
+    if(backdrop) backdrop.onclick=hideStatus;
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideStatus(); });
     if(location.hash==='#status') setTimeout(revealStatus,250);
     const form=$('searchForm');
     if(form) form.addEventListener('submit', e=>{
