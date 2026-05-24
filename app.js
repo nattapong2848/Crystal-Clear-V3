@@ -61,10 +61,21 @@
     await loadOrders();
     const logo=$('brandLogo');
     if(logo){ let clicks=0; logo.addEventListener('click',()=>{ clicks++; setTimeout(()=>clicks=0,900); if(clicks>=5) location.href='login.html'; }); logo.addEventListener('dblclick',()=>location.href='login.html'); }
-    const toStatus=$('toStatus'); if(toStatus) toStatus.onclick=e=>{ e.preventDefault(); document.querySelector('#status').scrollIntoView({behavior:'smooth'}); setTimeout(()=>$('searchInput')?.focus(),450); };
-    if($('statusResult')) $('statusResult').innerHTML=resultHTML(orders[0]);
+    const statusSection=document.querySelector('#status');
+    const revealStatus=()=>{
+      if(statusSection){ statusSection.classList.remove('status-hidden'); statusSection.classList.add('status-visible'); statusSection.scrollIntoView({behavior:'smooth',block:'start'}); }
+      setTimeout(()=>$('searchInput')?.focus(),450);
+    };
+    const toStatus=$('toStatus'); if(toStatus) toStatus.onclick=e=>{ e.preventDefault(); revealStatus(); };
+    if(location.hash==='#status') setTimeout(revealStatus,250);
     const form=$('searchForm');
-    if(form) form.addEventListener('submit', e=>{ e.preventDefault(); const q=$('searchInput').value.trim().toLowerCase(); const o=orders.find(x=>[x.id,x.phone,x.trackingOut,x.trackingIn,x.trackingReturn].some(v=>(v||'').toLowerCase().includes(q))); $('statusResult').innerHTML=resultHTML(o); });
+    if(form) form.addEventListener('submit', e=>{
+      e.preventDefault();
+      const q=$('searchInput').value.trim().toLowerCase();
+      if(!q) return toast('กรุณากรอกเบอร์โทรหรือหมายเลขออเดอร์');
+      const o=orders.find(x=>[x.id,x.phone,x.trackingOut,x.trackingIn,x.trackingReturn].some(v=>(v||'').toLowerCase().includes(q)));
+      $('statusResult').innerHTML=resultHTML(o);
+    });
   }
   async function initRegisterPage(){
     await loadOrders();

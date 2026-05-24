@@ -31,3 +31,10 @@ Password: `1234`
 4. Deploy > New deployment > Web app
 5. Execute as: Me / Who has access: Anyone
 6. เอา Web App URL มาใส่ใน `config.js` ตรง `API_URL`
+
+
+## อัปเดต v4
+- หน้าแรกเป็น Customer Portal แบบเต็มจอ
+- เอาการ์ดตัวอย่างด้านขวาออกแล้ว
+- ส่วนตรวจสอบสถานะถูกซ่อนไว้ จะแสดงเมื่อกดปุ่ม 'ตรวจสอบสถานะ' เท่านั้น
+- ปุ่มแอดมินถูกซ่อนให้จางมากขึ้น แต่ยังเข้าได้ที่ login.html หรือคลิกโลโก้ 5 ครั้ง
